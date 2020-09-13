@@ -1,18 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
 
-public class AssetImporter : MonoBehaviour
+[InitializeOnLoad]
+public static class AssetImporter
 {
-    // Start is called before the first frame update
-    void Start()
+
+    static AssetImporter()
     {
-        
+        EditorApplication.projectWindowChanged += OnProjectChanged;
+        // https://docs.unity3d.com/ScriptReference/EditorWindow.OnProjectChange.html
+        // According to Unity this code is not obsolete
     }
 
-    // Update is called once per frame
-    void Update()
+    static void OnProjectChanged()
     {
-        
+        Debug.Log("OnProjectChanged");
     }
+
 }
