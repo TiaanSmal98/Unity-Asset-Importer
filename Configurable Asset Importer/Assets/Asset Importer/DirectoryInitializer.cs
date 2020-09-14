@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+using System.Reflection;
 
 public static class DirectoryInitializer
 {
@@ -12,13 +13,17 @@ public static class DirectoryInitializer
     public static string JsonConfigFileName = "ImportSettings.json";
 
     /// <summary>
+    /// The path of the root directory of the Unity assets folder
+    /// </summary>
+    public static string RootAssetDirectory = "Assets";
+
+    /// <summary>
     /// Initializes all directories within the Unity assets directory with a configuration file
     /// </summary>
-    public static void Start()
+    public static void InitializeDirectories()
     {
-        List<string> directories = FindAllAssetDirectories("Assets"); //Find all directories within the Unity assets directory
-        directories.Add("Assets");
-
+        List<string> directories = FindDirectories(RootAssetDirectory, true); //Find all directories within the Unity assets directory
+        directories.Add(RootAssetDirectory);
 
         foreach (var currentPath in directories)
         {
@@ -29,6 +34,35 @@ public static class DirectoryInitializer
         }
 
         AssetDatabase.Refresh();
+    }
+
+    /// <summary>
+    /// Loops through all directories in the project and processes all configuration files
+    /// </summary>
+    /// <param name="path">The root path to search in</param>
+    /// <param name="defaultSettings">The settings the current directory is inheriting from</param>
+    /// <returns>A directory structure with all app settings and directories represented</returns>
+    public static DirectoryStructure GetImportSettings(string path, ImportSettings defaultSettings = null)
+    {
+        DirectoryStructure currentDirectory = new DirectoryStructure();
+
+        currentDirectory.path = path;
+
+        currentDirectory.settings = HelperFunctions.JsonToClass<ImportSettings>(path, RootAssetDirectory);
+
+        currentDirectory.childSettings = new List<DirectoryStructure>();
+
+        List<string> childDirectories = FindDirectories(path, false);
+
+        foreach (var currentChild in childDirectories)
+        {
+            DirectoryStructure currentChildStructure = GetImportSettings(currentChild, currentDirectory.settings); // Reads the specified settings from JSON
+            currentChildStructure.settings.InheritSettings(defaultSettings); // Applies default settings from parent directory JSON configuration file
+
+            currentDirectory.childSettings.Add(currentChildStructure);
+        }
+
+        return currentDirectory;
     }
 
     /// <summary>
@@ -64,8 +98,10 @@ public static class DirectoryInitializer
     /// <summary>
     /// Finds all directories within the Unity project asset folder
     /// </summary>
-    /// <returns>A list of Unity Directories</returns>
-    private static List<string> FindAllAssetDirectories(string path)
+    /// <param name="path">The path to search</param>
+    /// <param name="searchChildren">Recursively search for all directories contained in the directory, and its children</param>
+    /// <returns>A list of Directories within the given path</returns>
+    private static List<string> FindDirectories(string path, bool searchChildren)
     {
         List<string> parentDirectories = new List<string>();
         List<string> directories = new List<string>();
@@ -74,9 +110,12 @@ public static class DirectoryInitializer
 
         directories.AddRange(parentDirectories);
 
-        foreach (var currentDirectory in parentDirectories)
+        if (searchChildren) // Recursively finds all directories
         {
-            directories.AddRange(FindAllAssetDirectories(currentDirectory)); // Recursively finds all directories
+            foreach (var currentDirectory in parentDirectories)
+            {
+                directories.AddRange(FindDirectories(currentDirectory, searchChildren));
+            }
         }
 
         return directories;

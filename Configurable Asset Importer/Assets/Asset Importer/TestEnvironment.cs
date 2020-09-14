@@ -36,15 +36,14 @@ public class TestEnvironment : EditorWindow
         }
     }
 
-    
-
     private void MyButtonClick()
     {
         //DirectoryInitializer.CreateAssetConfigFile("Assets");
 
-        Debug.Log("Hello world");
+        //Debug.Log("Hello world");
+        DirectoryInitializer.InitializeDirectories();
 
-        DirectoryInitializer.Start();
+        var result = DirectoryInitializer.GetImportSettings(DirectoryInitializer.RootAssetDirectory);
+
     }
-
 }

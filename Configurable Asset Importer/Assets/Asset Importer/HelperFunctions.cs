@@ -27,6 +27,13 @@ public class HelperFunctions
         return list;
     }
 
+    /// <summary>
+    /// Generic function to create text files
+    /// If the file exists, it will be overwritten
+    /// </summary>
+    /// <param name="path">The root directory to create the text file</param>
+    /// <param name="fileName">The file name, including the file extension</param>
+    /// <param name="content">The content to write to the file</param>
     public static void CreateText(string path, string fileName, string content)
     {
         path = Path.Combine(path, fileName);
@@ -38,4 +45,32 @@ public class HelperFunctions
 
         File.WriteAllText(path, content);
     }
+
+    public static string ReadFromFile(string path, string fileName)
+    {
+        string contents = "";
+
+        if (!string.IsNullOrWhiteSpace(fileName))
+        {
+            path = Path.Combine(path, fileName);
+        }
+
+        if (File.Exists(path))
+        {
+            contents = File.ReadAllText(path);
+        }
+
+
+        return contents;
+    }
+
+    public static T JsonToClass<T>(string path, string fileName = "")
+    {
+        T genericType;
+
+        genericType = JsonUtility.FromJson<T>(ReadFromFile(path, fileName));
+
+        return genericType;
+    }
+
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 [InitializeOnLoad]
 public static class AssetImporter
 {
-
     static AssetImporter()
     {
         EditorApplication.projectWindowChanged += OnProjectChanged;
@@ -14,6 +13,7 @@ public static class AssetImporter
 
     static void OnProjectChanged()
     {
+        DirectoryInitializer.InitializeDirectories();
         Debug.Log("OnProjectChanged");
     }
 

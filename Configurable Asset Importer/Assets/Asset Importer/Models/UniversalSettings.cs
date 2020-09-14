@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,4 +16,22 @@ public class UniversalSettings
     public int? AudioSampleRate;
     public int? AudioCompressionFormat;
     public int? AudioLoadType;
+
+    public void InheritSettings(UniversalSettings settings)
+    {
+        if (this.MaxTextureSize == null)
+            this.MaxTextureSize = settings.MaxTextureSize;
+
+        if (this.MaxMipMapLevel == null)
+            this.MaxMipMapLevel = settings.MaxMipMapLevel;
+
+        if (this.AudioSampleRate == null)
+            this.AudioSampleRate = settings.AudioSampleRate;
+
+        if (this.AudioCompressionFormat == null)
+            this.AudioCompressionFormat = settings.AudioCompressionFormat;
+
+        if (this.AudioLoadType == null)
+            this.AudioLoadType = settings.AudioLoadType;
+    }
 }
