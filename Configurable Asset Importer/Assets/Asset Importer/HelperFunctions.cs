@@ -10,6 +10,16 @@ using UnityEditor;
 public class HelperFunctions
 {
     /// <summary>
+    /// Creates an empty Asset configuration file
+    /// </summary>
+    /// <param name="path">The directory in which to create a json config file</param>
+    public static void CreateJsonFile(string path, string jsonConfigFileName, object modelToWrite)
+    {
+        string json = JsonUtility.ToJson(modelToWrite, true);
+        CreateText(path, jsonConfigFileName, json);
+    }
+
+    /// <summary>
     /// Generic function that converts an array of generic type to list of generic type
     /// </summary>
     /// <typeparam name="T">Data Type</typeparam>

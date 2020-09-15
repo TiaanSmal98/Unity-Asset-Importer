@@ -34,4 +34,20 @@ public class UniversalSettings
         if (this.AudioLoadType == null)
             this.AudioLoadType = settings.AudioLoadType;
     }
+
+    public UniversalSettings Initialize()
+    {
+        this.MaxTextureSize = 100;
+
+        this.MaxMipMapLevel = 100;
+
+        this.AudioSampleRate = 128;
+
+        this.AudioCompressionFormat = 1;
+
+        this.AudioLoadType = 1;
+
+        return this;
+    }
+
 }

@@ -26,4 +26,14 @@ public class AndroidSettings : UniversalSettings
         base.InheritSettings(settings);
     }
 
+    public AndroidSettings Initialize()
+    {
+        this.OverrideForAndroid = false;
+
+        base.Initialize();
+
+        return this;
+    }
+
+
 }

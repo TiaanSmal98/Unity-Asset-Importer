@@ -12,6 +12,8 @@ public static class DirectoryInitializer
     /// </summary>
     public static string JsonConfigFileName = "ImportSettings.json";
 
+    public static string IgnoreDirectoryFileName = "AssetImporter.Ignore";
+
     /// <summary>
     /// The path of the root directory of the Unity assets folder
     /// </summary>
@@ -20,7 +22,7 @@ public static class DirectoryInitializer
     /// <summary>
     /// Initializes all directories within the Unity assets directory with a configuration file
     /// </summary>
-    public static void InitializeDirectories()
+    public static void InitializeDirectories(bool resetToDefault)
     {
         List<string> directories = FindDirectories(RootAssetDirectory, true); //Find all directories within the Unity assets directory
         directories.Add(RootAssetDirectory);
@@ -29,11 +31,9 @@ public static class DirectoryInitializer
         {
             if (!ContainsValidConfigurationFile(currentPath))
             {
-                CreateAssetConfigFile(currentPath);
+                HelperFunctions.CreateJsonFile(currentPath, JsonConfigFileName, new ImportSettings());
             }
         }
-
-        AssetDatabase.Refresh();
     }
 
     /// <summary>
@@ -86,16 +86,6 @@ public static class DirectoryInitializer
     }
 
     /// <summary>
-    /// Creates an empty Asset configuration file
-    /// </summary>
-    /// <param name="path">The directory in which to create a json config file</param>
-    private static void CreateAssetConfigFile(string path)
-    {
-        string json = JsonUtility.ToJson(new ImportSettings());
-        HelperFunctions.CreateText(path, JsonConfigFileName, json);
-    }
-
-    /// <summary>
     /// Finds all directories within the Unity project asset folder
     /// </summary>
     /// <param name="path">The path to search</param>
@@ -103,21 +93,67 @@ public static class DirectoryInitializer
     /// <returns>A list of Directories within the given path</returns>
     private static List<string> FindDirectories(string path, bool searchChildren)
     {
-        List<string> parentDirectories = new List<string>();
+        List<string> childDirectories = new List<string>();
         List<string> directories = new List<string>();
 
-        parentDirectories.AddRange(HelperFunctions.ArrayToList<string>(AssetDatabase.GetSubFolders(path)));
+        childDirectories.AddRange(HelperFunctions.ArrayToList<string>(AssetDatabase.GetSubFolders(path)));
 
-        directories.AddRange(parentDirectories);
+        directories.AddRange(childDirectories);
 
         if (searchChildren) // Recursively finds all directories
         {
-            foreach (var currentDirectory in parentDirectories)
+            foreach (var currentDirectory in childDirectories)
             {
-                directories.AddRange(FindDirectories(currentDirectory, searchChildren));
+                if (!IsIgnoredPath(currentDirectory)) // ensures children of ignored directory aren't included
+                {
+                    directories.AddRange(FindDirectories(currentDirectory, searchChildren));
+                }
+            }
+        }
+
+        int i = 0;
+        while (i < directories.Count) // removes ignored directories
+        {
+            if (IsIgnoredPath(directories[i]))
+            {
+                directories.RemoveAt(i);
+            }
+            else
+            {
+                i++;
             }
         }
 
         return directories;
     }
+
+    private static bool IsIgnoredPath(string directoryPath)
+    {
+        string fullPath = Path.Combine(directoryPath, IgnoreDirectoryFileName);
+
+        if (File.Exists(fullPath))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static void MarkDirectoryAsIgnored(string path)
+    {
+        string fullPath = Path.Combine(path, JsonConfigFileName);
+
+        if (File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
+        }
+
+        fullPath = Path.Combine(path, IgnoreDirectoryFileName);
+
+        if (!File.Exists(fullPath))
+        {
+            File.Create(fullPath);
+        }
+    }
+
 }

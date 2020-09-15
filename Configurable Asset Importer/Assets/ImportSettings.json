@@ -1,1 +1,4 @@
-{"UniversalSettings":{},"AndroidSettings":{}}
+{
+  "UniversalSettings": { "MaxTextureSize" : "100", "MaxMipLevel" :  "200"},
+    "AndroidSettings": {}
+}

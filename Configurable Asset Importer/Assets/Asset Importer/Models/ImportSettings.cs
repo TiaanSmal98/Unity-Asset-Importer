@@ -18,4 +18,14 @@ public class ImportSettings
 
         return this;
     }
+
+    public ImportSettings Initialize()
+    {
+        this.UniversalSettings = new UniversalSettings().Initialize();
+
+        this.AndroidSettings = new AndroidSettings().Initialize();
+
+        return this;
+    }
+
 }

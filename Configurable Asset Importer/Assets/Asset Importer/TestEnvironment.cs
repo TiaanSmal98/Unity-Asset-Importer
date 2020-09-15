@@ -12,7 +12,7 @@ public class TestEnvironment : EditorWindow
 
     public GameObject myGameObject;
 
-    [MenuItem("Asset Importer/Configure/Asset Importer Tool")]
+    [MenuItem("Test/Configure/Asset Importer Tool")]
     public static void ShowWindow()
     {
         GetWindow(typeof(TestEnvironment), true, "My title");
@@ -41,7 +41,7 @@ public class TestEnvironment : EditorWindow
         //DirectoryInitializer.CreateAssetConfigFile("Assets");
 
         //Debug.Log("Hello world");
-        DirectoryInitializer.InitializeDirectories();
+        DirectoryInitializer.InitializeDirectories(false);
 
         var result = DirectoryInitializer.GetImportSettings(DirectoryInitializer.RootAssetDirectory);
 
