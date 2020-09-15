@@ -12,7 +12,7 @@ public class AutomaticDirectoryInitializer : EditorWindow
     static void OnProjectChanged()
     {
         DirectoryInitializer.InitializeDirectories(false);
-        
+
         AssetDatabase.Refresh(ImportAssetOptions.DontDownloadFromCacheServer);
     }
 }

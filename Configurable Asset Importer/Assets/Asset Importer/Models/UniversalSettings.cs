@@ -17,6 +17,10 @@ public class UniversalSettings
     public int? AudioCompressionFormat;
     public int? AudioLoadType;
 
+    /// <summary>
+    /// Inherits settings from parent Universal platform class
+    /// </summary>
+    /// <param name="settings">The parents settings</param>
     public void InheritSettings(UniversalSettings settings)
     {
         if (this.MaxTextureSize == null)
@@ -35,6 +39,10 @@ public class UniversalSettings
             this.AudioLoadType = settings.AudioLoadType;
     }
 
+    /// <summary>
+    /// Initializes all variables within the class
+    /// </summary>
+    /// <returns>Returns itself</returns>
     public UniversalSettings Initialize()
     {
         this.MaxTextureSize = 100;

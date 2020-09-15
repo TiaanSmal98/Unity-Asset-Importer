@@ -9,6 +9,10 @@ public class AndroidSettings : UniversalSettings
 {
     public bool? OverrideForAndroid;
 
+    /// <summary>
+    /// Inherits settings from parent AndroidSettings class
+    /// </summary>
+    /// <param name="settings">The parents settings</param>
     public void InheritSettings(AndroidSettings settings)
     {
         if (this.OverrideForAndroid == null)
@@ -26,7 +30,13 @@ public class AndroidSettings : UniversalSettings
         base.InheritSettings(settings);
     }
 
+    /// <summary>
+    /// Initializes all variables within the class
+    /// </summary>
+    /// <returns>Returns itself</returns>
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
     public AndroidSettings Initialize()
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
     {
         this.OverrideForAndroid = false;
 
@@ -34,6 +44,4 @@ public class AndroidSettings : UniversalSettings
 
         return this;
     }
-
-
 }

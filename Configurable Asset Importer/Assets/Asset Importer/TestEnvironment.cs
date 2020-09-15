@@ -43,7 +43,7 @@ public class TestEnvironment : EditorWindow
         //Debug.Log("Hello world");
         DirectoryInitializer.InitializeDirectories(false);
 
-        var result = DirectoryInitializer.GetImportSettings(DirectoryInitializer.RootAssetDirectory);
+        var result = ApplySettings.GetImportSettings(DirectoryInitializer.RootAssetDirectory);
 
     }
 }

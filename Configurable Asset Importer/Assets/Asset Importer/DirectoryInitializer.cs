@@ -36,34 +36,7 @@ public static class DirectoryInitializer
         }
     }
 
-    /// <summary>
-    /// Loops through all directories in the project and processes all configuration files
-    /// </summary>
-    /// <param name="path">The root path to search in</param>
-    /// <param name="defaultSettings">The settings the current directory is inheriting from</param>
-    /// <returns>A directory structure with all app settings and directories represented</returns>
-    public static DirectoryStructure GetImportSettings(string path, ImportSettings defaultSettings = null)
-    {
-        DirectoryStructure currentDirectory = new DirectoryStructure();
-
-        currentDirectory.path = path;
-
-        currentDirectory.settings = HelperFunctions.JsonToClass<ImportSettings>(path, RootAssetDirectory);
-
-        currentDirectory.childSettings = new List<DirectoryStructure>();
-
-        List<string> childDirectories = FindDirectories(path, false);
-
-        foreach (var currentChild in childDirectories)
-        {
-            DirectoryStructure currentChildStructure = GetImportSettings(currentChild, currentDirectory.settings); // Reads the specified settings from JSON
-            currentChildStructure.settings.InheritSettings(defaultSettings); // Applies default settings from parent directory JSON configuration file
-
-            currentDirectory.childSettings.Add(currentChildStructure);
-        }
-
-        return currentDirectory;
-    }
+    
 
     /// <summary>
     /// Scans a directory for a configuration file
@@ -91,7 +64,7 @@ public static class DirectoryInitializer
     /// <param name="path">The path to search</param>
     /// <param name="searchChildren">Recursively search for all directories contained in the directory, and its children</param>
     /// <returns>A list of Directories within the given path</returns>
-    private static List<string> FindDirectories(string path, bool searchChildren)
+    public static List<string> FindDirectories(string path, bool searchChildren)
     {
         List<string> childDirectories = new List<string>();
         List<string> directories = new List<string>();
@@ -127,6 +100,11 @@ public static class DirectoryInitializer
         return directories;
     }
 
+    /// <summary>
+    /// Determines if a particular directory should be ignored
+    /// </summary>
+    /// <param name="directoryPath">The directory to query</param>
+    /// <returns>True if ignored, false if included</returns>
     private static bool IsIgnoredPath(string directoryPath)
     {
         string fullPath = Path.Combine(directoryPath, IgnoreDirectoryFileName);
@@ -139,6 +117,13 @@ public static class DirectoryInitializer
         return false;
     }
 
+    /// <summary>
+    /// Marks a directory as an ignored directory 
+    /// This also effects child directories, but does not individually mark them
+    /// Configuration settings will remain in child directories, but won't be applied
+    /// Configuration settings applied in the root of the path will be deleted
+    /// </summary>
+    /// <param name="path">The directory to ignore</param>
     public static void MarkDirectoryAsIgnored(string path)
     {
         string fullPath = Path.Combine(path, JsonConfigFileName);
