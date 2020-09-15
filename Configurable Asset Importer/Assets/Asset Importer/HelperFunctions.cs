@@ -56,7 +56,13 @@ public class HelperFunctions
         File.WriteAllText(path, content);
     }
 
-    public static string ReadFromFile(string path, string fileName)
+    /// <summary>
+    /// Reads contained text from a text file
+    /// </summary>
+    /// <param name="path">The parent directory containing the file, or the fully disclosed path of the file</param>
+    /// <param name="fileName">The files name, if not included in the path</param>
+    /// <returns>The text file contents as a string</returns>
+    public static string ReadFromFile(string path, string fileName = "")
     {
         string contents = "";
 
@@ -74,6 +80,13 @@ public class HelperFunctions
         return contents;
     }
 
+    /// <summary>
+    /// Converts a json file to its scriptable object
+    /// </summary>
+    /// <typeparam name="T">The object type</typeparam>
+    /// <param name="path">The parent directory containing the json file, or the fully disclosed path of the json file</param>
+    /// <param name="fileName">The jsons files name (including extension), if not included in the path</param>
+    /// <returns></returns>
     public static T JsonToClass<T>(string path, string fileName = "")
     {
         T genericType;
@@ -81,6 +94,79 @@ public class HelperFunctions
         genericType = JsonUtility.FromJson<T>(ReadFromFile(path, fileName));
 
         return genericType;
+    }
+
+    /// <summary>
+    /// Searches the asset database for Assets of a specific UnityEngine.Object type
+    /// </summary>
+    /// <typeparam name="T">The UnityEngine Object type</typeparam>
+    /// <param name="path">The parent directory to search</param>
+    /// <param name="recursive">Search within child directories of the supplied path</param>
+    /// <returns>A list of specified generic type of assets contained in the supplied directory</returns>
+    public static List<T> FindAssetsByType<T>(string path, bool recursive) where T : UnityEngine.Object
+    {
+        List<T> assets = new List<T>();
+
+        string searchString = string.Format("t:{0}", typeof(T));
+        searchString = searchString.Replace("UnityEngine.", "");
+
+        string[] guids = AssetDatabase.FindAssets(searchString, new string[] { path });
+
+        List<string> paths = AssetGuidToPath(guids);
+
+        foreach (var currentPath in paths)
+        {
+            T currentAsset = AssetDatabase.LoadAssetAtPath<T>(currentPath);
+
+            string expectedPath = CombinePathsForUnity(path, currentAsset.name);
+
+            if (currentPath.Contains(expectedPath) || recursive) // AssetDatabase searches recursively by default, this overrules that
+            {
+                assets.Add(currentAsset);
+            }
+        }
+
+        return assets;
+    }
+
+    /// <summary>
+    /// Combines paths for use with the AssetDatabase and other Unity.IO methods
+    /// </summary>
+    /// <param name="paths">The paths or file and folder names to combine</param>
+    /// <returns>A path from the combination of file and folder names supplied</returns>
+    private static string CombinePathsForUnity(params string[] paths)
+    {
+        string path = Path.Combine(paths);
+
+        while (path.Contains("\\") || path.Contains("//"))
+        {
+            path = path.Replace("\\", "/");
+            path = path.Replace("//", "/");
+        }
+
+        if (path[0] == '/' && path.Length > 1)
+        {
+            path = path.Substring(1, path.Length - 1);
+        }
+
+        return path;
+    }
+
+    /// <summary>
+    /// Finds the list of guids file paths
+    /// </summary>
+    /// <param name="guids">The Unity asset guids</param>
+    /// <returns>A list of asset file paths</returns>
+    private static List<string> AssetGuidToPath(params string[] guids)
+    {
+        List<string> paths = new List<string>();
+
+        foreach (var guid in guids)
+        {
+            paths.Add(AssetDatabase.GUIDToAssetPath(guid));
+        }
+
+        return paths;
     }
 
 }

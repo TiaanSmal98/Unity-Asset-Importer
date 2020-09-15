@@ -13,6 +13,6 @@ public class AutomaticDirectoryInitializer : EditorWindow
     {
         DirectoryInitializer.InitializeDirectories(false);
 
-        AssetDatabase.Refresh(ImportAssetOptions.DontDownloadFromCacheServer);
+        AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
     }
 }

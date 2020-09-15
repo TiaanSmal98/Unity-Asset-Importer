@@ -21,11 +21,11 @@ public static class ApplySettings
             && structure.settings.AndroidSettings.OverrideForAndroid != null
             && structure.settings.AndroidSettings.OverrideForAndroid == true)
         {
-            ApplyAndroidSettings(structure.settings.AndroidSettings);
+            ApplyAndroidSettings(structure.settings.AndroidSettings, structure.path);
         }
         else
         {
-            ApplyUniversalSettings(structure.settings.UniversalSettings);
+            ApplyUniversalSettings(structure.settings.UniversalSettings, structure.path);
         }
 
         foreach (var childStructure in structure.childSettings)
@@ -35,7 +35,7 @@ public static class ApplySettings
 
     }
 
-    private static void ApplyUniversalSettings(UniversalSettings settings)
+    private static void ApplyUniversalSettings(UniversalSettings settings, string path)
     {
         if (settings.AudioCompressionFormat != null)
         {
@@ -59,9 +59,10 @@ public static class ApplySettings
         }
     }
 
-    private static void ApplyAndroidSettings(AndroidSettings settings)
+    private static void ApplyAndroidSettings(AndroidSettings settings, string path)
     {
-        ApplyUniversalSettings((UniversalSettings)settings);
+        ApplyUniversalSettings((UniversalSettings)settings, path);
+        // custom android settings that are not part of Universal Settings can be added here later
     }
 
     /// <summary>
@@ -70,7 +71,7 @@ public static class ApplySettings
     /// <param name="path">The root path to search in</param>
     /// <param name="defaultSettings">The settings the current directory is inheriting from. Use this to programatically assign default settings</param>
     /// <returns>A directory structure with all app settings and directories represented</returns>
-    public static DirectoryStructure GetImportSettings(string path, ImportSettings defaultSettings = null)
+    private static DirectoryStructure GetImportSettings(string path, ImportSettings defaultSettings = null)
     {
         DirectoryStructure currentDirectory = new DirectoryStructure();
 
@@ -92,7 +93,4 @@ public static class ApplySettings
 
         return currentDirectory;
     }
-
-
-
 }

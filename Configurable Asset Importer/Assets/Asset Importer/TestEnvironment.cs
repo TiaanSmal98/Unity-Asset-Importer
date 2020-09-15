@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -38,12 +39,13 @@ public class TestEnvironment : EditorWindow
 
     private void MyButtonClick()
     {
-        //DirectoryInitializer.CreateAssetConfigFile("Assets");
+        string path = "Assets";
+        //string path = "Assets\\Audio";
 
-        //Debug.Log("Hello world");
-        DirectoryInitializer.InitializeDirectories(false);
 
-        var result = ApplySettings.GetImportSettings(DirectoryInitializer.RootAssetDirectory);
+        var a = HelperFunctions.FindAssetsByType<AudioClip>(path, false);
 
     }
+
+
 }
