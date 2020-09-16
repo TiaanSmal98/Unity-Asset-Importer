@@ -1,4 +1,17 @@
 {
-  "UniversalSettings": { "MaxTextureSize" : "100", "MaxMipLevel" :  "200"},
-    "AndroidSettings": {}
+    "UniversalSettings": {
+        "MaxTextureSize": -1,
+        "MaxMipMapLevel": -1,
+        "AudioSampleRate": 8000,
+        "AudioCompressionFormat": -1,
+        "AudioLoadType": -1
+    },
+    "AndroidSettings": {
+        "MaxTextureSize": -1,
+        "MaxMipMapLevel": -1,
+        "AudioSampleRate": 22050,
+        "AudioCompressionFormat": -1,
+        "AudioLoadType": -1,
+        "OverrideForAndroid": 1
+    }
 }

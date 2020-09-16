@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 [Serializable]
 public class AndroidSettings : UniversalSettings
 {
-    public bool? OverrideForAndroid;
+    public int OverrideForAndroid;
 
     /// <summary>
     /// Inherits settings from parent AndroidSettings class
@@ -15,16 +15,9 @@ public class AndroidSettings : UniversalSettings
     /// <param name="settings">The parents settings</param>
     public void InheritSettings(AndroidSettings settings)
     {
-        if (this.OverrideForAndroid == null)
+        if (this.OverrideForAndroid < 0)
         {
-            if (!settings.OverrideForAndroid == null)
-            {
-                this.OverrideForAndroid = settings.OverrideForAndroid;
-            }
-            else
-            {
-                this.OverrideForAndroid = false;
-            }
+            this.OverrideForAndroid = settings.OverrideForAndroid;
         }
 
         base.InheritSettings(settings);
@@ -38,7 +31,7 @@ public class AndroidSettings : UniversalSettings
     public AndroidSettings Initialize()
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
     {
-        this.OverrideForAndroid = false;
+        this.OverrideForAndroid = -1;
 
         base.Initialize();
 

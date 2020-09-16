@@ -26,17 +26,15 @@ public static class DirectoryInitializer
     {
         List<string> directories = FindDirectories(RootAssetDirectory, true); //Find all directories within the Unity assets directory
         directories.Add(RootAssetDirectory);
-
+        
         foreach (var currentPath in directories)
         {
-            if (!ContainsValidConfigurationFile(currentPath))
+            if (!ContainsValidConfigurationFile(currentPath) || resetToDefault)
             {
-                HelperFunctions.CreateJsonFile(currentPath, JsonConfigFileName, new ImportSettings());
+                HelperFunctions.CreateJsonFile(currentPath, JsonConfigFileName, new ImportSettings().Initialize());
             }
         }
     }
-
-    
 
     /// <summary>
     /// Scans a directory for a configuration file

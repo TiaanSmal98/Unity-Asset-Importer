@@ -101,11 +101,11 @@ public class HelperFunctions
     /// </summary>
     /// <typeparam name="T">The UnityEngine Object type</typeparam>
     /// <param name="path">The parent directory to search</param>
-    /// <param name="recursive">Search within child directories of the supplied path</param>
+    /// <param name="recursive">Search within child directories of the supplied path, false by default</param>
     /// <returns>A list of specified generic type of assets contained in the supplied directory</returns>
-    public static List<T> FindAssetsByType<T>(string path, bool recursive) where T : UnityEngine.Object
+    public static List<Asset> FindAssetsByType<T>(string path, bool recursive = false) where T : UnityEngine.Object
     {
-        List<T> assets = new List<T>();
+        List<Asset> assets = new List<Asset>();
 
         string searchString = string.Format("t:{0}", typeof(T));
         searchString = searchString.Replace("UnityEngine.", "");
@@ -122,12 +122,39 @@ public class HelperFunctions
 
             if (currentPath.Contains(expectedPath) || recursive) // AssetDatabase searches recursively by default, this overrules that
             {
-                assets.Add(currentAsset);
+                assets.Add(new Asset { asset = currentAsset, path = currentPath });
             }
         }
 
         return assets;
     }
+
+    public static List<string> FindAssetsByType2<T>(string path, bool recursive = false) where T : UnityEngine.Object
+    {
+        List<string> assets = new List<string>();
+
+        string searchString = string.Format("t:{0}", typeof(T));
+        searchString = searchString.Replace("UnityEngine.", "");
+
+        string[] guids = AssetDatabase.FindAssets(searchString, new string[] { path });
+
+        List<string> paths = AssetGuidToPath(guids);
+
+        foreach (var currentPath in paths)
+        {
+            T currentAsset = AssetDatabase.LoadAssetAtPath<T>(currentPath);
+
+            string expectedPath = CombinePathsForUnity(path, currentAsset.name);
+
+            if (currentPath.Contains(expectedPath) || recursive) // AssetDatabase searches recursively by default, this overrules that
+            {
+                assets.Add(currentPath);
+            }
+        }
+
+        return assets;
+    }
+
 
     /// <summary>
     /// Combines paths for use with the AssetDatabase and other Unity.IO methods

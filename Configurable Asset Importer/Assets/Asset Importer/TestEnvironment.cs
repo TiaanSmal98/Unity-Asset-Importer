@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Presets;
 using UnityEngine;
 
 public class TestEnvironment : EditorWindow
@@ -33,19 +34,52 @@ public class TestEnvironment : EditorWindow
 
         if (GUILayout.Button("My Button"))
         {
-            MyButtonClick();
+            ButtonClick();
         }
     }
 
-    private void MyButtonClick()
+    private void ButtonClick()
     {
-        string path = "Assets";
-        //string path = "Assets\\Audio";
+        ApplySettings.ImportAndApplySettings();
 
+        /*string path = "Assets\\Audio";
 
-        var a = HelperFunctions.FindAssetsByType<AudioClip>(path, false);
+        var assetPaths = HelperFunctions.FindAssetsByType<AudioClip>(path, false);
 
+        for (int i = 0; i < assetPaths.Count; i++)
+        {
+            Preset preset = new Preset((AudioClip)assetPaths[i].asset);
+
+            //var proper = new PropertyModification();
+            //proper.propertyPath = "m_Quality";
+            //proper.value = "0.5";
+
+            //preset.PropertyModifications.SetValue(proper, 19);
+
+            var importer = AssetImporter.GetAtPath(assetPaths[i].path);
+
+            AudioImporterSampleSettings a = new AudioImporterSampleSettings();
+            a.sampleRateOverride = 8000;
+
+            //importer.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(AudioClip), assetPaths[i].asset.name), a);
+
+            importer.SaveAndReimport();
+
+            AudioImporter audioImporter = (AudioImporter)importer;
+            AudioImporterSampleSettings audioImporterSampleSettings = audioImporter.defaultSampleSettings;
+           
+            audioImporterSampleSettings.sampleRateOverride = 8000;
+
+            audioImporterSampleSettings.loadType = AudioClipLoadType.DecompressOnLoad;
+            audioImporter.defaultSampleSettings = audioImporterSampleSettings;
+
+            //importer.defaultSampleSettings.sampleRateOverride = 8000;
+
+            bool result = preset.ApplyTo(importer);
+
+            Debug.Log(result);
+
+            AssetDatabase.Refresh();
+        }*/
     }
-
-
 }

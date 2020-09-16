@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 public class UniversalSettings
 {
     // Textures
-    public int? MaxTextureSize;
-    public int? MaxMipMapLevel;
+    public int MaxTextureSize;
+    public int MaxMipMapLevel;
 
     //Audio Files
-    public int? AudioSampleRate;
-    public int? AudioCompressionFormat;
-    public int? AudioLoadType;
+    public int AudioSampleRate;
+    public int AudioCompressionFormat;
+    public int AudioLoadType;
 
     /// <summary>
     /// Inherits settings from parent Universal platform class
@@ -23,19 +23,19 @@ public class UniversalSettings
     /// <param name="settings">The parents settings</param>
     public void InheritSettings(UniversalSettings settings)
     {
-        if (this.MaxTextureSize == null)
+        if (this.MaxTextureSize < 0)
             this.MaxTextureSize = settings.MaxTextureSize;
 
-        if (this.MaxMipMapLevel == null)
+        if (this.MaxMipMapLevel < 0)
             this.MaxMipMapLevel = settings.MaxMipMapLevel;
 
-        if (this.AudioSampleRate == null)
+        if (this.AudioSampleRate < 0)
             this.AudioSampleRate = settings.AudioSampleRate;
 
-        if (this.AudioCompressionFormat == null)
+        if (this.AudioCompressionFormat < 0)
             this.AudioCompressionFormat = settings.AudioCompressionFormat;
 
-        if (this.AudioLoadType == null)
+        if (this.AudioLoadType < 0)
             this.AudioLoadType = settings.AudioLoadType;
     }
 
@@ -45,15 +45,15 @@ public class UniversalSettings
     /// <returns>Returns itself</returns>
     public UniversalSettings Initialize()
     {
-        this.MaxTextureSize = 100;
+        this.MaxTextureSize = -1;
 
-        this.MaxMipMapLevel = 100;
+        this.MaxMipMapLevel = -1;
 
-        this.AudioSampleRate = 128;
+        this.AudioSampleRate = -1;
 
-        this.AudioCompressionFormat = 1;
+        this.AudioCompressionFormat = -1;
 
-        this.AudioLoadType = 1;
+        this.AudioLoadType = -1;
 
         return this;
     }
