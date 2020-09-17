@@ -15,8 +15,6 @@ namespace BitGames.CustomAssetImporter
         static void OnProjectChanged()
         {
             DirectoryInitializer.InitializeDirectories(false);
-
-            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
         }
     }
 }

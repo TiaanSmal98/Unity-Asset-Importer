@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace BitGames.CustomAssetImporter
 {
-
     public static class ApplySettings
     {
         /// <summary>
@@ -109,13 +108,19 @@ namespace BitGames.CustomAssetImporter
                 AudioImporter audioImporter = (AudioImporter)importer;
                 AudioImporterSampleSettings audioImporterSampleSettings = audioImporter.defaultSampleSettings;
 
-                audioImporterSampleSettings.compressionFormat = Keys.AudioCompressionFormats[format];
+                try
+                {
+                    audioImporterSampleSettings.compressionFormat = Keys.AudioCompressionFormats[format];
+                    audioImporter.defaultSampleSettings = audioImporterSampleSettings;
 
-                audioImporter.defaultSampleSettings = audioImporterSampleSettings;
+                    bool result = preset.ApplyTo(importer);
 
-                bool result = preset.ApplyTo(importer);
-
-                importer.SaveAndReimport();
+                    importer.SaveAndReimport();
+                }
+                catch
+                {
+                    Debug.LogError("Invalid Audio Compression Format");
+                }
             }
         }
 
@@ -130,16 +135,25 @@ namespace BitGames.CustomAssetImporter
 
             for (int i = 0; i < assets.Count; i++)
             {
-                var importer = AssetImporter.GetAtPath(assets[i].path);
 
-                AudioImporter audioImporter = (AudioImporter)importer;
-                AudioImporterSampleSettings audioImporterSampleSettings = audioImporter.defaultSampleSettings;
+                try
+                {
+                    var importer = AssetImporter.GetAtPath(assets[i].path);
 
-                audioImporterSampleSettings.loadType = Keys.AudioClipLoadTypes[loadType];
+                    AudioImporter audioImporter = (AudioImporter)importer;
+                 
+                    AudioImporterSampleSettings audioImporterSampleSettings = audioImporter.defaultSampleSettings;
+                    
+                    audioImporterSampleSettings.loadType = Keys.AudioClipLoadTypes[loadType];
 
-                audioImporter.defaultSampleSettings = audioImporterSampleSettings;
+                    audioImporter.defaultSampleSettings = audioImporterSampleSettings;
 
-                importer.SaveAndReimport();
+                    importer.SaveAndReimport();
+                }
+                catch
+                {
+                    Debug.LogError("Invalid Audio Load Type");
+                }
             }
         }
 
@@ -154,16 +168,26 @@ namespace BitGames.CustomAssetImporter
 
             for (int i = 0; i < assets.Count; i++)
             {
-                var importer = AssetImporter.GetAtPath(assets[i].path);
+                try
+                {
+                    var importer = AssetImporter.GetAtPath(assets[i].path);
 
-                AudioImporter audioImporter = (AudioImporter)importer;
-                AudioImporterSampleSettings audioImporterSampleSettings = audioImporter.defaultSampleSettings;
+                    AudioImporter audioImporter = (AudioImporter)importer;
 
-                audioImporterSampleSettings.sampleRateOverride = Convert.ToUInt32(sampleRate);
+                    AudioImporterSampleSettings audioImporterSampleSettings = audioImporter.defaultSampleSettings;
 
-                audioImporter.defaultSampleSettings = audioImporterSampleSettings;
+                    audioImporterSampleSettings.sampleRateSetting = AudioSampleRateSetting.OverrideSampleRate;
 
-                importer.SaveAndReimport();
+                    audioImporterSampleSettings.sampleRateOverride = Convert.ToUInt32(sampleRate);
+
+                    audioImporter.defaultSampleSettings = audioImporterSampleSettings;
+
+                    importer.SaveAndReimport();
+                }
+                catch
+                {
+                    Debug.LogError("Invalid audio sample rate");
+                }
             }
         }
 
@@ -179,15 +203,23 @@ namespace BitGames.CustomAssetImporter
 
             for (int i = 0; i < assets.Count; i++)
             {
-                var importer = AssetImporter.GetAtPath(assets[i].path);
+                try
+                {
+                    var importer = AssetImporter.GetAtPath(assets[i].path);
 
-                TextureImporter textureImporter = (TextureImporter)importer;
+                    TextureImporter textureImporter = (TextureImporter)importer;
 
-                textureImporter.anisoLevel = anisoLevel;
+                    textureImporter.anisoLevel = anisoLevel;
 
-                importer = textureImporter;
+                    importer = textureImporter;
 
-                importer.SaveAndReimport();
+                    importer.SaveAndReimport();
+                }
+                catch
+                {
+                    Debug.LogError("Invalid aniso level");
+                }
+
             }
         }
 
@@ -203,15 +235,22 @@ namespace BitGames.CustomAssetImporter
 
             for (int i = 0; i < assets.Count; i++)
             {
-                var importer = AssetImporter.GetAtPath(assets[i].path);
+                try
+                {
+                    var importer = AssetImporter.GetAtPath(assets[i].path);
 
-                TextureImporter textureImporter = (TextureImporter)importer;
+                    TextureImporter textureImporter = (TextureImporter)importer;
 
-                textureImporter.spritePixelsPerUnit = pixelsPerUnit;
+                    textureImporter.spritePixelsPerUnit = pixelsPerUnit;
 
-                importer = textureImporter;
+                    importer = textureImporter;
 
-                importer.SaveAndReimport();
+                    importer.SaveAndReimport();
+                }
+                catch
+                {
+                    Debug.LogError("Invalid pixels per Unit (texture)");
+                }
             }
         }
 
@@ -228,15 +267,22 @@ namespace BitGames.CustomAssetImporter
 
             for (int i = 0; i < assets.Count; i++)
             {
-                var importer = AssetImporter.GetAtPath(assets[i].path);
+                try
+                {
+                    var importer = AssetImporter.GetAtPath(assets[i].path);
 
-                TextureImporter textureImporter = (TextureImporter)importer;
+                    TextureImporter textureImporter = (TextureImporter)importer;
 
-                textureImporter.maxTextureSize = maxTextureSize;
+                    textureImporter.maxTextureSize = maxTextureSize;
 
-                importer = textureImporter;
+                    importer = textureImporter;
 
-                importer.SaveAndReimport();
+                    importer.SaveAndReimport();
+                }
+                catch
+                {
+                    Debug.LogError("Invalid Max Texture size");
+                }
             }
         }
 

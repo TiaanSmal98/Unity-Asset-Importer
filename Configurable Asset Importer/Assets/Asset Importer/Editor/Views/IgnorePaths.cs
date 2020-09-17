@@ -14,6 +14,9 @@ namespace BitGames.CustomAssetImporter
         {
             string excludedPath = EditorUtility.OpenFolderPanel("Select a folder to ignore", "Assets", "");
             DirectoryInitializer.MarkDirectoryAsIgnored(excludedPath);
+
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+
         }
     }
 }
