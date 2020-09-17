@@ -10,7 +10,8 @@ public class UniversalSettings
 {
     // Textures
     public int MaxTextureSize;
-    public int MaxMipMapLevel;
+    public int TextureAnisoLevel;
+    public int TexturePixelsPerUnit;
 
     //Audio Files
     public int AudioSampleRate;
@@ -23,11 +24,14 @@ public class UniversalSettings
     /// <param name="settings">The parents settings</param>
     public void InheritSettings(UniversalSettings settings)
     {
+        if (this.TextureAnisoLevel < 0)
+            this.TextureAnisoLevel = settings.TextureAnisoLevel;
+
+        if (this.TexturePixelsPerUnit < 0)
+            this.TexturePixelsPerUnit = settings.TexturePixelsPerUnit;
+
         if (this.MaxTextureSize < 0)
             this.MaxTextureSize = settings.MaxTextureSize;
-
-        if (this.MaxMipMapLevel < 0)
-            this.MaxMipMapLevel = settings.MaxMipMapLevel;
 
         if (this.AudioSampleRate < 0)
             this.AudioSampleRate = settings.AudioSampleRate;
@@ -47,13 +51,15 @@ public class UniversalSettings
     {
         this.MaxTextureSize = -1;
 
-        this.MaxMipMapLevel = -1;
-
         this.AudioSampleRate = -1;
 
         this.AudioCompressionFormat = -1;
 
         this.AudioLoadType = -1;
+
+        this.TextureAnisoLevel = -1;
+
+        this.TexturePixelsPerUnit = -1;
 
         return this;
     }
