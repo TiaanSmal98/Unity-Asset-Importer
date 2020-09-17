@@ -17,9 +17,13 @@ public static class ApplySettings
         ApplySettingsRecursively(directoryStructure);
     }
 
+    /// <summary>
+    /// Recursively applies settings to all directories within the application
+    /// </summary>
+    /// <param name="structure">The directory structure to implement settings onto</param>
     private static void ApplySettingsRecursively(DirectoryStructure structure)
     {
-        if (structure.settings.AndroidSettings.OverrideForAndroid == 1 &&  EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
+        if (structure.settings.AndroidSettings.OverrideForAndroid == 1 && EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
         {
             ApplyAndroidSettings(structure.settings.AndroidSettings, structure.path);
         }
@@ -35,12 +39,22 @@ public static class ApplySettings
 
     }
 
+    /// <summary>
+    /// Applies android specific settings, also calls ApplyUniversalSettings() for settings shared with the Android platform
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <param name="path"></param>
     private static void ApplyAndroidSettings(AndroidSettings settings, string path)
     {
         ApplyUniversalSettings((UniversalSettings)settings, path);
         // custom android settings that are not part of Universal Settings can be added here later
     }
 
+    /// <summary>
+    /// Applies Universal platform settings
+    /// </summary>
+    /// <param name="settings">The settings to apply</param>
+    /// <param name="path">The path to apply the settings to</param>
     private static void ApplyUniversalSettings(UniversalSettings settings, string path)
     {
         if (settings.AudioCompressionFormat > 0)
@@ -55,18 +69,30 @@ public static class ApplySettings
         {
             ApplyAudioSampleRate(path, settings.AudioSampleRate);
         }
-        if (settings.MaxMipMapLevel > 0)
+        if (settings.TextureAnisoLevel > 0)
         {
-            ApplyMaxMipMapLevel(path, settings.MaxMipMapLevel);
+            ApplyTextureAnisoLevel<Texture>(path, settings.TextureAnisoLevel);
+            ApplyTextureAnisoLevel<Texture2D>(path, settings.TextureAnisoLevel);
         }
         if (settings.MaxTextureSize > 0)
         {
-            ApplyMaxTextureSize(path, settings.MaxTextureSize);
+            ApplyMaxTextureSize<Texture>(path, settings.MaxTextureSize);
+            ApplyMaxTextureSize<Texture2D>(path, settings.MaxTextureSize);
+        }
+        if (settings.TexturePixelsPerUnit > 0)
+        {
+            ApplyTexturePixelsPerUnit<Texture>(path, settings.TexturePixelsPerUnit);
+            ApplyTexturePixelsPerUnit<Texture2D>(path, settings.TexturePixelsPerUnit);
         }
     }
 
     #region Apply Asset Settings
 
+    /// <summary>
+    /// Applies audio compression format settings to all audio files within the supplied directory. (non recursive)
+    /// </summary>
+    /// <param name="path">The path to search</param>
+    /// <param name="format">The desired load format. Please see Keys.AudioCompressionFormats for more</param>
     private static void ApplyAudioCompressionFormat(string path, int format)
     {
         var assets = HelperFunctions.FindAssetsByType<AudioClip>(path);
@@ -85,19 +111,22 @@ public static class ApplySettings
             audioImporter.defaultSampleSettings = audioImporterSampleSettings;
 
             bool result = preset.ApplyTo(importer);
-            
+
             importer.SaveAndReimport();
         }
     }
 
+    /// <summary>
+    /// Applies audio load type to all audio files within the supplied directory. (non recursive)
+    /// </summary>
+    /// <param name="path">The path to search</param>
+    /// <param name="loadType">The desired load type for audio files. See Keys.AudioClipLoadTypes for more</param>
     private static void ApplyAudioLoadType(string path, int loadType)
     {
         var assets = HelperFunctions.FindAssetsByType<AudioClip>(path);
 
         for (int i = 0; i < assets.Count; i++)
         {
-            Preset preset = new Preset((AudioClip)assets[i].asset);
-
             var importer = AssetImporter.GetAtPath(assets[i].path);
 
             AudioImporter audioImporter = (AudioImporter)importer;
@@ -107,20 +136,21 @@ public static class ApplySettings
 
             audioImporter.defaultSampleSettings = audioImporterSampleSettings;
 
-            bool result = preset.ApplyTo(importer);
-
             importer.SaveAndReimport();
         }
     }
 
+    /// <summary>
+    /// Applies audio sample rate to all audio files within the supplied directory. (non recursive)
+    /// </summary>
+    /// <param name="path">The path to search</param>
+    /// <param name="sampleRate">The sample rate to apply to audio files</param>
     private static void ApplyAudioSampleRate(string path, int sampleRate)
     {
         var assets = HelperFunctions.FindAssetsByType<AudioClip>(path);
 
         for (int i = 0; i < assets.Count; i++)
         {
-            Preset preset = new Preset((AudioClip)assets[i].asset);
-
             var importer = AssetImporter.GetAtPath(assets[i].path);
 
             AudioImporter audioImporter = (AudioImporter)importer;
@@ -130,20 +160,81 @@ public static class ApplySettings
 
             audioImporter.defaultSampleSettings = audioImporterSampleSettings;
 
-            bool result = preset.ApplyTo(importer);
+            importer.SaveAndReimport();
+        }
+    }
+
+    /// <summary>
+    /// Applies Aniso level to texture and texture2d objects within the supplied directory. (non recursive)
+    /// </summary>
+    /// <typeparam name="T">Textture or Texture2D</typeparam>
+    /// <param name="path">The directory to apply the aniso level setting too</param>
+    /// <param name="anisoLevel">The aniso level to be applied to textures</param>
+    private static void ApplyTextureAnisoLevel<T>(string path, int anisoLevel) where T : UnityEngine.Object
+    {
+        var assets = HelperFunctions.FindAssetsByType<T>(path);
+
+        for (int i = 0; i < assets.Count; i++)
+        {
+            var importer = AssetImporter.GetAtPath(assets[i].path);
+
+            TextureImporter textureImporter = (TextureImporter)importer;
+
+            textureImporter.anisoLevel = anisoLevel;
+
+            importer = textureImporter;
 
             importer.SaveAndReimport();
         }
     }
 
-    private static void ApplyMaxMipMapLevel(string path, int maxMipMapLevel)
+    /// <summary>
+    /// Applies pixels per inch for all textures within the supplied directory. (non recursive)
+    /// </summary>
+    /// <typeparam name="T">Texture or Texture2D</typeparam>
+    /// <param name="path">The directory to apply the pixels per unit to</param>
+    /// <param name="pixelsPerUnit">The pixels per unit to apply to textures</param>
+    private static void ApplyTexturePixelsPerUnit<T>(string path, int pixelsPerUnit) where T : UnityEngine.Object
     {
+        var assets = HelperFunctions.FindAssetsByType<T>(path);
 
+        for (int i = 0; i < assets.Count; i++)
+        {
+            var importer = AssetImporter.GetAtPath(assets[i].path);
+
+            TextureImporter textureImporter = (TextureImporter)importer;
+
+            textureImporter.spritePixelsPerUnit = pixelsPerUnit;
+
+            importer = textureImporter;
+
+            importer.SaveAndReimport();
+        }
     }
 
-    private static void ApplyMaxTextureSize(string path, int maxTextureSize)
+    /// <summary>
+    /// Applies the Max texture size attribute to all textures within the supplied directory. (non recursive)
+    /// Leaves all other asset settings to their default state
+    /// </summary>
+    /// <typeparam name="T">Texture or Texture2D</typeparam>
+    /// <param name="path">The directory to search</param>
+    /// <param name="maxTextureSize">The desired max texture size</param>
+    private static void ApplyMaxTextureSize<T>(string path, int maxTextureSize) where T : UnityEngine.Object
     {
+        var assets = HelperFunctions.FindAssetsByType<T>(path);
 
+        for (int i = 0; i < assets.Count; i++)
+        {
+            var importer = AssetImporter.GetAtPath(assets[i].path);
+
+            TextureImporter textureImporter = (TextureImporter)importer;
+
+            textureImporter.maxTextureSize = maxTextureSize;
+
+            importer = textureImporter;
+
+            importer.SaveAndReimport();
+        }
     }
 
     #endregion
@@ -170,7 +261,7 @@ public static class ApplySettings
 
         List<string> childDirectoryPaths = DirectoryInitializer.FindDirectories(path, false);
 
-        foreach(var currentChildDirectory in childDirectoryPaths)
+        foreach (var currentChildDirectory in childDirectoryPaths)
         {
             DirectoryStructure childDirectoryStructure = new DirectoryStructure();
 
@@ -180,29 +271,5 @@ public static class ApplySettings
         }
 
         return currentDirectory;
-
-        /*DirectoryStructure currentDirectory = new DirectoryStructure();
-
-        currentDirectory.path = path;
-
-        currentDirectory.settings = HelperFunctions.JsonToClass<ImportSettings>(path, DirectoryInitializer.JsonConfigFileName);
-
-        currentDirectory.childSettings = new List<DirectoryStructure>();
-
-        List<string> childDirectories = DirectoryInitializer.FindDirectories(path, false);
-
-        foreach (var currentChild in childDirectories)
-        {
-            DirectoryStructure currentChildStructure = GetImportSettings(currentChild, currentDirectory.settings); // Reads the specified settings from JSON
-
-            if (defaultSettings != null)
-            {
-                currentChildStructure.settings.InheritSettings(defaultSettings); // Applies default settings from parent directory JSON configuration file
-            }
-
-            currentDirectory.childSettings.Add(currentChildStructure);
-        }
-
-        return currentDirectory;*/
     }
 }
