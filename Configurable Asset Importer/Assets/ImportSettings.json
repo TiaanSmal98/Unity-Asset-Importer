@@ -1,19 +1,19 @@
 {
     "UniversalSettings": {
-        "MaxTextureSize": -1,
-        "TextureAnisoLevel": -1,
-        "TexturePixelsPerUnit": -1,
-        "AudioSampleRate": -1,
-        "AudioCompressionFormat": -1,
-        "AudioLoadType": -1
+        "MaxTextureSize": 2048,
+        "TextureAnisoLevel": 16,
+        "TexturePixelsPerUnit": 512,
+        "AudioSampleRate": 192000,
+        "AudioCompressionFormat": 1,
+        "AudioLoadType": 2
     },
     "AndroidSettings": {
-        "MaxTextureSize": -1,
-        "TextureAnisoLevel": -1,
-        "TexturePixelsPerUnit": -1,
-        "AudioSampleRate": -1,
-        "AudioCompressionFormat": -1,
-        "AudioLoadType": -1,
-        "OverrideForAndroid": -1
+        "MaxTextureSize": 512,
+        "TextureAnisoLevel": 8,
+        "TexturePixelsPerUnit": 513,
+        "AudioSampleRate": 48000,
+        "AudioCompressionFormat": 2,
+        "AudioLoadType": 1,
+        "OverrideForAndroid": 1
     }
 }

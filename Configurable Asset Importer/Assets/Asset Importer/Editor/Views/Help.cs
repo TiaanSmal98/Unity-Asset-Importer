@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace BitGames.CustomAssetImporter
@@ -79,7 +74,7 @@ namespace BitGames.CustomAssetImporter
             GUILayout.Label("AudioSampleRate (int): ");
             GUI.color = textColor;
             GUILayout.Label("\t-1 : Apply from parent directory, if available, otherwise ignore \n" +
-            "\tCombinations (Hz): 8,000, 11,025, 22,050, 42,100, 48,000, 96,000, 192,000");
+            "\tCombinations (Hz): 8 000, 11 025, 22 050, 42 100, 48 000, 96 000, 192 000");
 
             GUI.color = variable;
             GUILayout.Label("AudioCompressionFormat (int): ");

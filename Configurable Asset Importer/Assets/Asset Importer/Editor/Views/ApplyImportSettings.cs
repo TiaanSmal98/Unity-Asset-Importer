@@ -25,6 +25,7 @@ namespace BitGames.CustomAssetImporter
             if (GUILayout.Button("Apply Import Settings"))
             {
                 ApplySettings.ImportAndApplySettings();
+                base.Close();
             }
         }
     }
