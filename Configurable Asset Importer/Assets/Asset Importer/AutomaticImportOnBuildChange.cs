@@ -2,12 +2,15 @@
 using UnityEditor;
 using UnityEditor.Build;
 
-public class AutomaticImportOnBuildChange : IActiveBuildTargetChanged
+namespace BitGames.CustomAssetImporter
 {
-    public int callbackOrder { get { return 0; } }
-
-    public void OnActiveBuildTargetChanged(BuildTarget previousTarget, BuildTarget newTarget)
+    public class AutomaticImportOnBuildChange : IActiveBuildTargetChanged
     {
-        ApplySettings.ImportAndApplySettings();
+        public int callbackOrder { get { return 0; } }
+
+        public void OnActiveBuildTargetChanged(BuildTarget previousTarget, BuildTarget newTarget)
+        {
+            ApplySettings.ImportAndApplySettings();
+        }
     }
 }

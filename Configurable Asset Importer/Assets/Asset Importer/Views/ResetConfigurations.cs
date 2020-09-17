@@ -6,23 +6,27 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
-public class ResetConfigurations : EditorWindow
+namespace BitGames.CustomAssetImporter
 {
-    [MenuItem("Asset Importer/Configure/Reset")]
-    public static void ResetAllConfigurations()
+    public class ResetConfigurations : EditorWindow
     {
-        GetWindow(typeof(ResetConfigurations), true, "Reset All Configurations");
-    }
-
-    private void OnGUI()
-    {
-        GUILayout.Label("Reset Assets", EditorStyles.boldLabel);
-        GUILayout.Label("All platform Import Settings will be removed!", EditorStyles.label);
-        GUILayout.Label("Directory ignore files are unaffected", EditorStyles.label);
-
-        if (GUILayout.Button("Reset Configuration"))
+        [MenuItem("Asset Importer/Configure/Reset")]
+        public static void ResetAllConfigurations()
         {
-            DirectoryInitializer.InitializeDirectories(true);
+            GetWindow(typeof(ResetConfigurations), true, "Reset All Configurations");
+        }
+
+        private void OnGUI()
+        {
+            GUILayout.Label("Reset Assets", EditorStyles.boldLabel);
+            GUILayout.Label("All platform Import Settings will be removed!", EditorStyles.label);
+            GUILayout.Label("Directory ignore files are unaffected", EditorStyles.label);
+
+            if (GUILayout.Button("Reset Configuration"))
+            {
+                DirectoryInitializer.InitializeDirectories(true);
+                AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            }
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System;
 
-public class Asset
+namespace BitGames.CustomAssetImporter
 {
-    public UnityEngine.Object asset;
-    public string path;
+    public class Asset
+    {
+        public UnityEngine.Object asset;
+        public string path;
+    }
 }

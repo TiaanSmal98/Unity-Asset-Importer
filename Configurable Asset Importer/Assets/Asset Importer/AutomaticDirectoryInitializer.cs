@@ -1,18 +1,22 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[InitializeOnLoad]
-public class AutomaticDirectoryInitializer : EditorWindow
+
+namespace BitGames.CustomAssetImporter
 {
-    static AutomaticDirectoryInitializer()
+    [InitializeOnLoad]
+    public class AutomaticDirectoryInitializer : EditorWindow
     {
-        EditorApplication.projectChanged += OnProjectChanged;
-    }
+        static AutomaticDirectoryInitializer()
+        {
+            EditorApplication.projectChanged += OnProjectChanged;
+        }
 
-    static void OnProjectChanged()
-    {
-        DirectoryInitializer.InitializeDirectories(false);
+        static void OnProjectChanged()
+        {
+            DirectoryInitializer.InitializeDirectories(false);
 
-        AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+        }
     }
 }

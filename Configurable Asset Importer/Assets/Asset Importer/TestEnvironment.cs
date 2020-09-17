@@ -4,82 +4,85 @@ using UnityEditor;
 using UnityEditor.Presets;
 using UnityEngine;
 
-public class TestEnvironment : EditorWindow
+namespace BitGames.CustomAssetImporter
 {
-    public string baseName { get; set; }
-
-    public int myInt;
-
-    public float myFloatSlider;
-
-    public GameObject myGameObject;
-
-    [MenuItem("Test/Configure/Asset Importer Tool")]
-    public static void ShowWindow()
+    public class TestEnvironment : EditorWindow
     {
-        GetWindow(typeof(TestEnvironment), true, "My title");
-    }
+        public string baseName { get; set; }
 
-    private void OnGUI()
-    {
-        GUILayout.Label("Import Assets", EditorStyles.boldLabel);
+        public int myInt;
 
-        baseName = EditorGUILayout.TextField("Base Name", baseName);
+        public float myFloatSlider;
 
-        myInt = EditorGUILayout.IntField("My Int", 0);
+        public GameObject myGameObject;
 
-        myFloatSlider = EditorGUILayout.Slider("My Slider", 0f, 0f, 100f);
-
-        myGameObject = EditorGUILayout.ObjectField("My GO", myGameObject, typeof(GameObject), false) as GameObject;
-
-        if (GUILayout.Button("My Button"))
+        [MenuItem("Test/Configure/Asset Importer Tool")]
+        public static void ShowWindow()
         {
-            ButtonClick();
+            GetWindow(typeof(TestEnvironment), true, "My title");
         }
-    }
 
-    private void ButtonClick()
-    {
-        ApplySettings.ImportAndApplySettings();
-
-        /*string path = "Assets\\Audio";
-
-        var assetPaths = HelperFunctions.FindAssetsByType<AudioClip>(path, false);
-
-        for (int i = 0; i < assetPaths.Count; i++)
+        private void OnGUI()
         {
-            Preset preset = new Preset((AudioClip)assetPaths[i].asset);
+            GUILayout.Label("Import Assets", EditorStyles.boldLabel);
 
-            //var proper = new PropertyModification();
-            //proper.propertyPath = "m_Quality";
-            //proper.value = "0.5";
+            baseName = EditorGUILayout.TextField("Base Name", baseName);
 
-            //preset.PropertyModifications.SetValue(proper, 19);
+            myInt = EditorGUILayout.IntField("My Int", 0);
 
-            var importer = AssetImporter.GetAtPath(assetPaths[i].path);
+            myFloatSlider = EditorGUILayout.Slider("My Slider", 0f, 0f, 100f);
 
-            AudioImporterSampleSettings a = new AudioImporterSampleSettings();
-            a.sampleRateOverride = 8000;
+            myGameObject = EditorGUILayout.ObjectField("My GO", myGameObject, typeof(GameObject), false) as GameObject;
 
-            //importer.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(AudioClip), assetPaths[i].asset.name), a);
+            if (GUILayout.Button("My Button"))
+            {
+                ButtonClick();
+            }
+        }
 
-            importer.SaveAndReimport();
+        private void ButtonClick()
+        {
+            ApplySettings.ImportAndApplySettings();
 
-            AudioImporter audioImporter = (AudioImporter)importer;
-            AudioImporterSampleSettings audioImporterSampleSettings = audioImporter.defaultSampleSettings;
-           
-            audioImporterSampleSettings.sampleRateOverride = 8000;
+            /*string path = "Assets\\Audio";
 
-            audioImporterSampleSettings.loadType = AudioClipLoadType.DecompressOnLoad;
-            audioImporter.defaultSampleSettings = audioImporterSampleSettings;
+            var assetPaths = HelperFunctions.FindAssetsByType<AudioClip>(path, false);
 
-            //importer.defaultSampleSettings.sampleRateOverride = 8000;
+            for (int i = 0; i < assetPaths.Count; i++)
+            {
+                Preset preset = new Preset((AudioClip)assetPaths[i].asset);
 
-            bool result = preset.ApplyTo(importer);
+                //var proper = new PropertyModification();
+                //proper.propertyPath = "m_Quality";
+                //proper.value = "0.5";
 
-            Debug.Log(result);
+                //preset.PropertyModifications.SetValue(proper, 19);
 
-            AssetDatabase.Refresh();
-        }*/
+                var importer = AssetImporter.GetAtPath(assetPaths[i].path);
+
+                AudioImporterSampleSettings a = new AudioImporterSampleSettings();
+                a.sampleRateOverride = 8000;
+
+                //importer.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(AudioClip), assetPaths[i].asset.name), a);
+
+                importer.SaveAndReimport();
+
+                AudioImporter audioImporter = (AudioImporter)importer;
+                AudioImporterSampleSettings audioImporterSampleSettings = audioImporter.defaultSampleSettings;
+
+                audioImporterSampleSettings.sampleRateOverride = 8000;
+
+                audioImporterSampleSettings.loadType = AudioClipLoadType.DecompressOnLoad;
+                audioImporter.defaultSampleSettings = audioImporterSampleSettings;
+
+                //importer.defaultSampleSettings.sampleRateOverride = 8000;
+
+                bool result = preset.ApplyTo(importer);
+
+                Debug.Log(result);
+
+                AssetDatabase.Refresh();
+            }*/
+        }
     }
 }

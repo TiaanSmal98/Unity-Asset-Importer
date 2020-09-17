@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public static class Keys
+namespace BitGames.CustomAssetImporter
 {
-    public static Dictionary<int, AudioCompressionFormat> AudioCompressionFormats = new Dictionary<int, AudioCompressionFormat> {
+    public static class Keys
+    {
+        public static Dictionary<int, AudioCompressionFormat> AudioCompressionFormats = new Dictionary<int, AudioCompressionFormat> {
         {1, AudioCompressionFormat.AAC },
         {2, AudioCompressionFormat.ADPCM },
         {3, AudioCompressionFormat.ATRAC9 },
@@ -16,10 +18,11 @@ public static class Keys
         {10,AudioCompressionFormat.XMA }
     };
 
-    public static Dictionary<int, AudioClipLoadType> AudioClipLoadTypes = new Dictionary<int, AudioClipLoadType>
+        public static Dictionary<int, AudioClipLoadType> AudioClipLoadTypes = new Dictionary<int, AudioClipLoadType>
     {
         {1, AudioClipLoadType.CompressedInMemory },
         {2, AudioClipLoadType.DecompressOnLoad },
         {3, AudioClipLoadType.Streaming }
     };
+    }
 }

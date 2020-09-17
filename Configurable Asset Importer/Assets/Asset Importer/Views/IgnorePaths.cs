@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEditor;
 
-public class IgnorePaths : EditorWindow
+namespace BitGames.CustomAssetImporter
 {
-    [MenuItem("Asset Importer/Configure/Ignore Paths")]
-    public static void IgnorePathsFilePicker()
+    public class IgnorePaths : EditorWindow
     {
-        string excludedPath = EditorUtility.OpenFolderPanel("Select a folder to ignore", "Assets", "");
-        DirectoryInitializer.MarkDirectoryAsIgnored(excludedPath);
+        [MenuItem("Asset Importer/Configure/Ignore Paths")]
+        public static void IgnorePathsFilePicker()
+        {
+            string excludedPath = EditorUtility.OpenFolderPanel("Select a folder to ignore", "Assets", "");
+            DirectoryInitializer.MarkDirectoryAsIgnored(excludedPath);
+        }
     }
 }

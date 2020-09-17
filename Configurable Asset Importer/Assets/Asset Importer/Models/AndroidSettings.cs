@@ -4,37 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-[Serializable]
-public class AndroidSettings : UniversalSettings
+namespace BitGames.CustomAssetImporter
 {
-    public int OverrideForAndroid;
-
-    /// <summary>
-    /// Inherits settings from parent AndroidSettings class
-    /// </summary>
-    /// <param name="settings">The parents settings</param>
-    public void InheritSettings(AndroidSettings settings)
+    [Serializable]
+    public class AndroidSettings : UniversalSettings
     {
-        if (this.OverrideForAndroid < 0)
+        public int OverrideForAndroid;
+
+        /// <summary>
+        /// Inherits settings from parent AndroidSettings class
+        /// </summary>
+        /// <param name="settings">The parents settings</param>
+        public void InheritSettings(AndroidSettings settings)
         {
-            this.OverrideForAndroid = settings.OverrideForAndroid;
+            if (this.OverrideForAndroid < 0)
+            {
+                this.OverrideForAndroid = settings.OverrideForAndroid;
+            }
+
+            base.InheritSettings(settings);
         }
 
-        base.InheritSettings(settings);
-    }
-
-    /// <summary>
-    /// Initializes all variables within the class
-    /// </summary>
-    /// <returns>Returns itself</returns>
+        /// <summary>
+        /// Initializes all variables within the class
+        /// </summary>
+        /// <returns>Returns itself</returns>
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-    public AndroidSettings Initialize()
+        public AndroidSettings Initialize()
 #pragma warning restore CS0108 // Member hides inherited member; missing new keyword
-    {
-        this.OverrideForAndroid = -1;
+        {
+            this.OverrideForAndroid = -1;
 
-        base.Initialize();
+            base.Initialize();
 
-        return this;
+            return this;
+        }
     }
 }
