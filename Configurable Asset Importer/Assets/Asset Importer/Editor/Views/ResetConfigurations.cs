@@ -18,10 +18,16 @@ namespace BitGames.CustomAssetImporter
 
         private void OnGUI()
         {
+            base.maxSize = new Vector2(260f, 85f);
+            base.minSize = base.maxSize;
+
             GUILayout.Label("Reset Assets", EditorStyles.boldLabel);
             GUILayout.Label("All platform Import Settings will be removed!", EditorStyles.label);
             GUILayout.Label("Directory ignore files are unaffected", EditorStyles.label);
 
+            GUILayout.Space(10f);
+
+            GUI.color = Color.red;
             if (GUILayout.Button("Reset Configuration"))
             {
                 DirectoryInitializer.InitializeDirectories(true);

@@ -1,0 +1,19 @@
+{
+    "UniversalSettings": {
+        "MaxTextureSize": -1,
+        "TextureAnisoLevel": -1,
+        "TexturePixelsPerUnit": -1,
+        "AudioSampleRate": -1,
+        "AudioCompressionFormat": -1,
+        "AudioLoadType": -1
+    },
+    "AndroidSettings": {
+        "MaxTextureSize": -1,
+        "TextureAnisoLevel": -1,
+        "TexturePixelsPerUnit": -1,
+        "AudioSampleRate": -1,
+        "AudioCompressionFormat": -1,
+        "AudioLoadType": -1,
+        "OverrideForAndroid": -1
+    }
+}
